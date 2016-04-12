@@ -1,0 +1,73 @@
+<%
+director_uuid = 'f00ee203-ebaf-43b7-9c7b-66754b6518c4'
+deployment_name = 'mcafee'
+%>
+---
+name: <%= deployment_name %>
+director_uuid: <%= director_uuid %>
+
+releases:
+  - name: mcafee
+    version: latest
+
+compilation:
+  workers: 3
+  network: default
+  reuse_compilation_vms: true
+  cloud_properties:
+    instance_type: t2.micro
+    availability_zone: us-east-1a
+    ephemeral_disk:
+      size: 8192
+      type: gp2
+
+update:
+  canaries: 0
+  canary_watch_time: 30000-60000
+  update_watch_time: 30000-60000
+  max_in_flight: 32
+  serial: false
+
+networks:
+  - name: default
+    subnets:
+    - range: 10.0.16.0/20
+      gateway: 10.0.16.1
+      dns:
+        - 10.0.0.2
+      static:
+        - 10.0.16.95
+      reserved:
+        - 10.0.16.2-10.0.16.94
+      cloud_properties:
+        subnet: subnet-dd3300aa
+
+resource_pools:
+  - name: default
+    stemcell:
+      name: bosh-aws-xen-hvm-ubuntu-trusty-go_agent
+      version: '2989'
+    network: default
+    cloud_properties:
+      instance_type: m3.large
+      availability_zone: us-east-1a
+      ephemeral_disk:
+        size: 8192
+        type: gp2
+
+jobs:
+  - name: cma_agent
+    templates:
+      - name: cma_agent
+    instances: 1
+    resource_pool: default
+    networks:
+    - name: default
+      default: [dns, gateway]
+      static_ips:
+        - 10.0.16.95
+
+properties:
+  cma_agent:
+    system_owner: "PIVOTAL"
+    system_project: "CloudFoundry"

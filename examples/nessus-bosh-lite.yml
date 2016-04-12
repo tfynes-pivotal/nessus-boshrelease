@@ -1,0 +1,62 @@
+<%
+director_uuid = '9bca5701-66c0-43ee-a4d0-64813b4b5ece'
+deployment_name = 'mcafee'
+%>
+---
+name: <%= deployment_name %>
+director_uuid: <%= director_uuid %>
+
+releases:
+  - name: mcafee
+    version: latest
+
+compilation:
+  workers: 3
+  network: default
+  reuse_compilation_vms: true
+  cloud_properties: {}
+
+update:
+  canaries: 0
+  canary_watch_time: 30000-60000
+  update_watch_time: 30000-60000
+  max_in_flight: 32
+  serial: false
+
+networks:
+  - name: default
+    type: manual
+    subnets:
+      - range: 10.244.0.0/24
+        reserved:
+          - 10.244.0.1
+        static:
+          - 10.244.0.2
+        cloud_properties: {}
+
+resource_pools:
+  - name: default
+    network: default
+    stemcell:
+      name: bosh-warden-boshlite-ubuntu-trusty-go_agent
+      version: latest
+    cloud_properties: {}
+
+jobs:
+  - name: cma_agent
+    templates:
+      - name: cma_agent
+    instances: 1
+    resource_pool: default
+    networks:
+      - name: default
+        default: [dns, gateway]
+        static_ips:
+          - 10.244.0.2
+
+properties:
+  cma_agent:
+    system_owner: "Pivotal"
+    system_project: "CloudFoundry"
+    system_role: "Testing McAfee CMA agent"
+    download_url: "https://mcafee.cfapps.io/install.sh"
