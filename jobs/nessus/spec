@@ -1,7 +1,13 @@
 ---
 name: nessus
+
 templates:
   pre_start.erb: bin/pre_start
+  ctl.erb: bin/ctl.erb
+
+packages:
+- nessus
+
 
 properties:
   foo: bar 
