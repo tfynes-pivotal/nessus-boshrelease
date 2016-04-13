@@ -3,4 +3,5 @@ name: nessus
 templates:
   pre_start.erb: bin/pre_start
 
-properties: {}
+properties:
+  foo: bar 
