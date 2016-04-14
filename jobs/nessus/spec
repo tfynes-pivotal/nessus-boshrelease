@@ -1,13 +1,9 @@
 ---
 name: nessus
-
-templates:
-  pre_start.erb: bin/pre_start
-  ctl.erb: bin/ctl.erb
-
 packages:
 - nessus
-
-
+templates:
+  /bin/pre_start.erb: bin/pre_start
+  /bin/ctl.erb: bin/ctl.erb
 properties:
   foo: bar 
