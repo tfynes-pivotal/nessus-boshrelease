@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -e # exit immediately if a simple command exits with a non-zero status
+
+source /var/vcap/packages/nessus/utils.sh
+source /var/vcap/packages/nessus/nessus_utils.sh
+
+RUN_DIR=/var/vcap/sys/run/nessus
+LOG_DIR=/var/vcap/sys/log/nessus
+TMP_DIR=/var/vcap/sys/tmp/nessus
+STORE_DIR=/var/vcap/store/nessus
+mkdir -p ${RUN_DIR} ${LOG_DIR} ${TMP_DIR} ${STORE_DIR}
+
+PIDFILE=/opt/nessus/scratch/.nessus.pid
+
+case $1 in
+
+  start)
+    pid_guard ${PIDFILE} "nessus"
+    ;;
+
+  stop)
+    kill_and_wait ${PIDFILE}
+    ;;
+
+  *)
+    echo "Usage: $0 {start|stop}"
+    exit 1
+    ;;
+
+esac
+exit 0
