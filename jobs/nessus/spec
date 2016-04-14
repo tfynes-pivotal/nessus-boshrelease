@@ -3,7 +3,7 @@ name: nessus
 packages:
 - nessus
 templates:
-  /bin/pre_start.erb: bin/pre_start
-  /bin/ctl.erb: bin/ctl.erb
+  pre_start.erb: pre_start
+  ctl.erb: ctl.erb
 properties:
   foo: bar 
