@@ -1,5 +1,5 @@
-check process nessus
-  with pidfile /var/vcap/sys/run/nessus/pid
-  start program "/var/vcap/jobs/nessus/ctl start"
-  stop program "/var/vcap/jobs/nessus/ctl stop"
-  group vcap
+#check process nessus
+#  with pidfile /var/vcap/sys/run/nessus/pid
+#  start program "/var/vcap/jobs/nessus/ctl start"
+#  stop program "/var/vcap/jobs/nessus/ctl stop"
+#  group vcap
